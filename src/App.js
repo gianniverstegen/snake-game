@@ -20,6 +20,7 @@ function App() {
     col: 5,
     directionHead: "w",
     nextBody: new SnakeBody(4, 5), // access by -> nextBody.row, nextBody.col
+    // nextBody: undefined,
     tail: undefined,
   });
   const [boardState, setState] = useState({
@@ -39,6 +40,7 @@ function App() {
 
   useInterval(
     () => {
+      resetBoard();
       moveSnake();
     },
     isRunning ? 500 : null
@@ -50,8 +52,6 @@ function App() {
     } else updateSnakeHeadUsingSnakeHeadDirection(); // board updates are now in these functions
     // maybe when snake children updated make the board changes one functions
     //    for the head and the childs
-    updateSnake();
-    // updateBoard();
   }
 
   function handleDirectionChange(e) {
@@ -67,7 +67,6 @@ function App() {
   }
 
   function isDirectionValid() {
-    // console.log();
     if (snakeHead.directionHead === "n" && direction === "s") {
       return false;
     } else if (snakeHead.directionHead === "s" && direction === "n") {
@@ -82,9 +81,7 @@ function App() {
   function updateSnake() {
     // Basis of the linked list
     let current = snakeHead;
-    let next = snakeHead.nextBody;
-    next.row = current.row;
-    next.col = current.col;
+    let next = current.nextBody;
 
     while (current.nextBody !== undefined) {
       next.row = current.row;
@@ -92,86 +89,91 @@ function App() {
       current = current.nextBody;
       next = next.nextBody;
     }
-
-    console.log(snakeHead.nextBody.row, snakeHead.nextBody.col);
   }
 
   function resetBoard() {
-    // reset the board here
+    let newGrid = boardState.grid.slice();
+    newGrid[snakeHead.row][snakeHead.col].state = "node";
+    let current = snakeHead.nextBody;
+    while (current !== undefined) {
+      newGrid[current.row][current.col].state = "node";
+      current = current.nextBody;
+    }
+    setState({ ...boardState, grid: newGrid });
   }
 
-  function updateBoard() {
+  function updateBoard(row, col) {
     //update the board here
     let newGrid = boardState.grid.slice();
+    newGrid[row][col].state = "node-isSnake";
     let current = snakeHead;
-    while (current.nextBody !== undefined) {
+    while (current !== undefined) {
       newGrid[current.row][current.col].state = "node-isSnake";
       current = current.nextBody;
     }
+    setState({ ...boardState, grid: newGrid });
   }
 
   function updateSnakeHeadUsingGlobalDirection() {
-    let newGrid = boardState.grid.slice();
     if (direction === "e") {
       let newSnakeHeadCol = snakeHead.col + 1;
       if (newSnakeHeadCol < 19) {
-        newGrid[snakeHead.row][snakeHead.col].state = "node";
-        newGrid[snakeHead.row][newSnakeHeadCol].state = "node-isSnake";
         setHead({ ...snakeHead, col: newSnakeHeadCol, directionHead: "e" });
+        updateSnake();
+        updateBoard(snakeHead.row, newSnakeHeadCol);
       } else setRunning(false);
     } else if (direction === "s") {
       let newSnakeHeadRow = snakeHead.row + 1;
       if (newSnakeHeadRow < 19) {
-        newGrid[snakeHead.row][snakeHead.col].state = "node";
-        newGrid[newSnakeHeadRow][snakeHead.col].state = "node-isSnake";
         setHead({ ...snakeHead, row: newSnakeHeadRow, directionHead: "s" });
+        updateSnake();
+        updateBoard(newSnakeHeadRow, snakeHead.col);
       } else setRunning(false);
     } else if (direction === "w") {
       let newSnakeHeadCol = snakeHead.col - 1;
       if (newSnakeHeadCol >= 0) {
-        newGrid[snakeHead.row][snakeHead.col].state = "node";
-        newGrid[snakeHead.row][newSnakeHeadCol].state = "node-isSnake";
         setHead({ ...snakeHead, col: newSnakeHeadCol, directionHead: "w" });
+        updateSnake();
+        updateBoard(snakeHead.row, newSnakeHeadCol);
       } else setRunning(false);
     } else if (direction === "n") {
       let newSnakeHeadRow = snakeHead.row - 1;
       if (newSnakeHeadRow >= 0) {
-        newGrid[snakeHead.row][snakeHead.col].state = "node";
-        newGrid[newSnakeHeadRow][snakeHead.col].state = "node-isSnake";
         setHead({ ...snakeHead, row: newSnakeHeadRow, directionHead: "n" });
+        updateSnake();
+        updateBoard(newSnakeHeadRow, snakeHead.col);
       } else setRunning(false);
     }
   }
 
   function updateSnakeHeadUsingSnakeHeadDirection() {
-    let newGrid = boardState.grid.slice();
     if (snakeHead.directionHead === "e") {
       let newSnakeHeadCol = snakeHead.col + 1;
       if (newSnakeHeadCol < 19) {
-        newGrid[snakeHead.row][snakeHead.col].state = "node";
-        newGrid[snakeHead.row][newSnakeHeadCol].state = "node-isSnake";
         setHead({ ...snakeHead, col: newSnakeHeadCol, directionHead: "e" });
+        updateSnake();
+        updateBoard(snakeHead.row, newSnakeHeadCol);
       } else setRunning(false);
     } else if (snakeHead.directionHead === "s") {
       let newSnakeHeadRow = snakeHead.row + 1;
       if (newSnakeHeadRow < 19) {
-        newGrid[snakeHead.row][snakeHead.col].state = "node";
-        newGrid[newSnakeHeadRow][snakeHead.col].state = "node-isSnake";
         setHead({ ...snakeHead, row: newSnakeHeadRow, directionHead: "s" });
+        updateSnake();
+        updateBoard(newSnakeHeadRow, snakeHead.col);
       } else setRunning(false);
     } else if (snakeHead.directionHead === "w") {
       let newSnakeHeadCol = snakeHead.col - 1;
       if (newSnakeHeadCol >= 0) {
-        newGrid[snakeHead.row][snakeHead.col].state = "node";
-        newGrid[snakeHead.row][newSnakeHeadCol].state = "node-isSnake";
         setHead({ ...snakeHead, col: newSnakeHeadCol, directionHead: "w" });
+        updateSnake();
+        updateBoard(snakeHead.row, newSnakeHeadCol);
       } else setRunning(false);
     } else if (snakeHead.directionHead === "n") {
       let newSnakeHeadRow = snakeHead.row - 1;
       if (newSnakeHeadRow >= 0) {
-        newGrid[snakeHead.row][snakeHead.col].state = "node";
-        newGrid[newSnakeHeadRow][snakeHead.col].state = "node-isSnake";
         setHead({ ...snakeHead, row: newSnakeHeadRow, directionHead: "n" });
+        updateSnake();
+        updateBoard(newSnakeHeadRow, snakeHead.col);
       } else setRunning(false);
     }
   }
