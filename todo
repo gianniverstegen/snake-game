@@ -1,0 +1,8 @@
+[*] Use the set interval to then change its place 
+[*] Make direction changes
+[*] Make moves illegal based on direction changes
+[*] Make the game reset when a border is hit
+[] refactor updateBoardUsingSnakeHeadDirection and updateBoardUsingGlobalDirection
+[] Make the snake a linked list so the childs of the head follow
+[] Add food
+[] Add death

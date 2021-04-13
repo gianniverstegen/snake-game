@@ -1,13 +1,119 @@
-body {
+* {
   margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
+    "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  font-weight: bolder;
+  color: #afa8a8;
+  font-size: 14px;
 }
 
-code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
+button {
+  margin-right: 5px;
+  margin-top: 4.5px;
+  vertical-align: middle;
+  left: 0;
+  width: 15%;
+  height: 80%;
+  background-color: #2f2fa2;
+  border: none;
+  outline: none;
+  -moz-outline: none;
 }
+
+button:active {
+  color: #802bb1;
+}
+
+button.play:active {
+  color: #4c495d;
+}
+
+/* Header Section*/
+header {
+  display: flex;
+  top: 0;
+  left: 0;
+  background-color: #2f2fa2;
+  width: 100%;
+  height: 50px;
+}
+
+header > ul {
+  padding: 0%;
+  width: 100%;
+  display: inline-block;
+  vertical-align: middle;
+}
+
+button.logo {
+  margin-top: 4px;
+  font-size: 18px;
+  font-weight: bold;
+  width: 20%;
+  color: #f64c72;
+}
+
+button.play {
+  border-radius: 8px;
+  width: 15%;
+  background-color: #f64c72;
+  color: #2f2fa2;
+  margin-right: 3%;
+}
+
+/* Play Area */
+div.playArea {
+  width: 100%;
+  min-width: 500px;
+  position: fixed;
+  height: 100%;
+  min-height: 600px;
+  text-align: center;
+  background-color: #242582;
+  color: #2d283e;
+}
+
+div.node_container {
+  top: 38%;
+  transform: translate(0, -40%);
+  height: auto;
+  overflow: auto;
+  text-align: center;
+  border: solid 3px #553d67;
+  display: inline-block;
+  position: relative;
+}
+
+div.node_row {
+  height: 27px;
+}
+
+.node {
+  text-align: center;
+  line-height: 25px;
+  vertical-align: middle;
+  width: 25px;
+  height: 25px;
+  border: solid 0.2px #242582;
+  display: inline-block;
+}
+
+.node-isSnake {
+  text-align: center;
+  line-height: 25px;
+  vertical-align: middle;
+  width: 25px;
+  height: 25px;
+  display: inline-block;
+  background-color: #2f2fa2;
+  border: solid 0.2px #2f2fa2;
+}
+
+/* GREY: 99738e
+DARKERGREY: 553D67
+DARKERPURPLE: 242582
+PURPLE: 2f2fa2
+ORANGE: f64c72 */
