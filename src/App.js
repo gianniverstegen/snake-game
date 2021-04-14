@@ -18,7 +18,11 @@ function App() {
     row: 5,
     col: 5,
     directionHead: "w",
-    nextBody: new SnakeBody(4, 5, undefined), // access by -> nextBody.row, nextBody.col
+    nextBody: new SnakeBody(
+      4,
+      5,
+      new SnakeBody(3, 5, new SnakeBody(2, 5, undefined))
+    ), // access by -> nextBody.row, nextBody.col
     // nextBody: undefined,
     tail: undefined,
   });
@@ -42,7 +46,7 @@ function App() {
       resetBoard();
       moveSnake();
     },
-    isRunning ? 500 : null
+    isRunning ? 200 : null
   );
 
   function moveSnake() {
@@ -79,20 +83,23 @@ function App() {
 
   function updateSnake(newRow, newCol) {
     // Basis of the linked list
-    let current = snakeHead; // old cords
-    snakeHead.nextBody.row = current.row;
-    snakeHead.nextBody.col = current.col;
-    // because the current snakehead cords are outdated, you can reference them this this way
-    // the nextBody cords are also outdated, so should be saved, so the nextbody can have them
-    console.log(snakeHead.row, snakeHead.col);
-    console.log(newRow, newCol); // new cords
-    // linked list isnt working because I'm not "saving" the data
-    // while (current.nextBody !== undefined) {
-    //   next.row = current.row;
-    //   next.col = current.col;
-    //   current = next;
-    //   next = next.nextBody;
-    // }
+    // Maybe make a new body for every body and just fix it that way
+    // 1st body
+    let current = snakeHead.nextBody;
+    let previous = snakeHead;
+
+    while (current !== undefined) {
+      let saveCurrent = new SnakeBody(
+        current.row,
+        current.col,
+        current.nextBody
+      );
+      current.col = previous.col;
+      current.row = previous.row;
+      previous = saveCurrent;
+      current = current.nextBody;
+    }
+
     updateBoard(newRow, newCol);
   }
 
@@ -112,7 +119,7 @@ function App() {
     newGrid[row][col].state = "node-isSnake";
     let current = snakeHead.nextBody;
     while (current !== undefined) {
-      newGrid[current.row][current.col].state = "node-isSnake";
+      newGrid[current.row][current.col].state = "node-isSnakeBody";
       current = current.nextBody;
     }
     setState({ ...boardState, grid: newGrid });

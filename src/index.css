@@ -123,6 +123,17 @@ div.node_row {
   background-image: url("./images/pixil-frame-0.png");
 }
 
+.node-isSnakeBody {
+  text-align: center;
+  line-height: 25px;
+  vertical-align: middle;
+  width: 25px;
+  height: 25px;
+  display: inline-block;
+  background-color: #949494;
+  border: solid 0.2px #535353;
+}
+
 /* GREY: 99738e
 DARKERGREY: 553D67
 DARKERPURPLE: 242582
