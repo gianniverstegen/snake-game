@@ -18,8 +18,8 @@ function App() {
     row: 5,
     col: 5,
     directionHead: "w",
-    // nextBody: new SnakeBody(4, 5, undefined), // access by -> nextBody.row, nextBody.col
-    nextBody: undefined,
+    nextBody: new SnakeBody(4, 5, undefined), // access by -> nextBody.row, nextBody.col
+    // nextBody: undefined,
     tail: undefined,
   });
   const [boardState, setState] = useState({
@@ -77,10 +77,15 @@ function App() {
     } else return true;
   }
 
-  function updateSnake() {
+  function updateSnake(newRow, newCol) {
     // Basis of the linked list
-    let current = snakeHead;
-    let next = snakeHead.nextBody;
+    let current = snakeHead; // old cords
+    snakeHead.nextBody.row = current.row;
+    snakeHead.nextBody.col = current.col;
+    // because the current snakehead cords are outdated, you can reference them this this way
+    // the nextBody cords are also outdated, so should be saved, so the nextbody can have them
+    console.log(snakeHead.row, snakeHead.col);
+    console.log(newRow, newCol); // new cords
     // linked list isnt working because I'm not "saving" the data
     // while (current.nextBody !== undefined) {
     //   next.row = current.row;
@@ -88,6 +93,7 @@ function App() {
     //   current = next;
     //   next = next.nextBody;
     // }
+    updateBoard(newRow, newCol);
   }
 
   function resetBoard() {
@@ -102,17 +108,9 @@ function App() {
   }
 
   function updateBoard(row, col) {
-    console.log(row, col); // Updates row and col !!!! update the snake with these
-    //update the board here
-    //Make this a function of update snake and call it when updatasnek gets called
-    // additionally look into the row and col situation of update snake
-    // now, the outdated version of the snakehead is being used instead of the newly updated
-    // position
-    // good luck tomorrow Gianni
     let newGrid = boardState.grid.slice();
     newGrid[row][col].state = "node-isSnake";
     let current = snakeHead.nextBody;
-    console.log(current);
     while (current !== undefined) {
       newGrid[current.row][current.col].state = "node-isSnake";
       current = current.nextBody;
@@ -121,71 +119,79 @@ function App() {
   }
 
   function updateSnakeHeadUsingGlobalDirection() {
-    let newCol = snakeHead.col;
+    var newCol = snakeHead.col;
     let newRow = snakeHead.row;
+    let newDirection = "";
     if (direction === "e") {
       let newSnakeHeadCol = snakeHead.col + 1;
       if (newSnakeHeadCol < 19) {
-        setHead({ ...snakeHead, col: newSnakeHeadCol, directionHead: "e" });
-        updateSnake();
-        updateBoard(snakeHead.row, newSnakeHeadCol);
+        newCol = newSnakeHeadCol;
+        newDirection = "e";
       } else setRunning(false);
     } else if (direction === "s") {
       let newSnakeHeadRow = snakeHead.row + 1;
       if (newSnakeHeadRow < 19) {
-        setHead({ ...snakeHead, row: newSnakeHeadRow, directionHead: "s" });
-        updateSnake();
-        updateBoard(newSnakeHeadRow, snakeHead.col);
+        newRow = newSnakeHeadRow;
+        newDirection = "s";
       } else setRunning(false);
     } else if (direction === "w") {
       let newSnakeHeadCol = snakeHead.col - 1;
       if (newSnakeHeadCol >= 0) {
-        setHead({ ...snakeHead, col: newSnakeHeadCol, directionHead: "w" });
-        updateSnake();
-        updateBoard(snakeHead.row, newSnakeHeadCol);
+        newCol = newSnakeHeadCol;
+        newDirection = "w";
       } else setRunning(false);
     } else if (direction === "n") {
       let newSnakeHeadRow = snakeHead.row - 1;
       if (newSnakeHeadRow >= 0) {
-        setHead({ ...snakeHead, row: newSnakeHeadRow, directionHead: "n" });
-        updateSnake();
-        updateBoard(newSnakeHeadRow, snakeHead.col);
+        newRow = newSnakeHeadRow;
+        newDirection = "n";
       } else setRunning(false);
     }
-    // setHead
-    // updatesnake(row, col) --> which leads to update board in updatesnake
+    setHead({
+      ...snakeHead,
+      col: newCol,
+      row: newRow,
+      directionHead: newDirection,
+    });
+    updateSnake(newRow, newCol);
   }
 
   function updateSnakeHeadUsingSnakeHeadDirection() {
+    let newCol = snakeHead.col;
+    let newRow = snakeHead.row;
+    let newDirection = "";
     if (snakeHead.directionHead === "e") {
       let newSnakeHeadCol = snakeHead.col + 1;
       if (newSnakeHeadCol < 19) {
-        setHead({ ...snakeHead, col: newSnakeHeadCol, directionHead: "e" });
-        updateSnake();
-        updateBoard(snakeHead.row, newSnakeHeadCol);
+        newCol = newSnakeHeadCol;
+        newDirection = "e";
       } else setRunning(false);
     } else if (snakeHead.directionHead === "s") {
       let newSnakeHeadRow = snakeHead.row + 1;
       if (newSnakeHeadRow < 19) {
-        setHead({ ...snakeHead, row: newSnakeHeadRow, directionHead: "s" });
-        updateSnake();
-        updateBoard(newSnakeHeadRow, snakeHead.col);
+        newRow = newSnakeHeadRow;
+        newDirection = "s";
       } else setRunning(false);
     } else if (snakeHead.directionHead === "w") {
       let newSnakeHeadCol = snakeHead.col - 1;
       if (newSnakeHeadCol >= 0) {
-        setHead({ ...snakeHead, col: newSnakeHeadCol, directionHead: "w" });
-        updateSnake();
-        updateBoard(snakeHead.row, newSnakeHeadCol);
+        newCol = newSnakeHeadCol;
+        newDirection = "w";
       } else setRunning(false);
     } else if (snakeHead.directionHead === "n") {
       let newSnakeHeadRow = snakeHead.row - 1;
       if (newSnakeHeadRow >= 0) {
-        setHead({ ...snakeHead, row: newSnakeHeadRow, directionHead: "n" });
-        updateSnake();
-        updateBoard(newSnakeHeadRow, snakeHead.col);
+        newRow = newSnakeHeadRow;
+        newDirection = "n";
       } else setRunning(false);
     }
+    setHead({
+      ...snakeHead,
+      col: newCol,
+      row: newRow,
+      directionHead: newDirection,
+    });
+    updateSnake(newRow, newCol);
   }
 
   function switchMode() {
@@ -219,8 +225,8 @@ function App() {
       row: 5,
       col: 5,
       directionHead: "w",
-      // nextBody: new SnakeBody(4, 5),
-      nextBody: undefined,
+      nextBody: new SnakeBody(4, 5, undefined),
+      // nextBody: undefined,
       tail: undefined,
     });
     setState({
