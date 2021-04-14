@@ -102,6 +102,7 @@ function App() {
   }
 
   function updateBoard(row, col) {
+    console.log(row, col); // Updates row and col !!!! update the snake with these
     //update the board here
     //Make this a function of update snake and call it when updatasnek gets called
     // additionally look into the row and col situation of update snake
@@ -120,6 +121,8 @@ function App() {
   }
 
   function updateSnakeHeadUsingGlobalDirection() {
+    let newCol = snakeHead.col;
+    let newRow = snakeHead.row;
     if (direction === "e") {
       let newSnakeHeadCol = snakeHead.col + 1;
       if (newSnakeHeadCol < 19) {
@@ -149,6 +152,8 @@ function App() {
         updateBoard(newSnakeHeadRow, snakeHead.col);
       } else setRunning(false);
     }
+    // setHead
+    // updatesnake(row, col) --> which leads to update board in updatesnake
   }
 
   function updateSnakeHeadUsingSnakeHeadDirection() {
@@ -214,7 +219,8 @@ function App() {
       row: 5,
       col: 5,
       directionHead: "w",
-      nextBody: new SnakeBody(4, 5),
+      // nextBody: new SnakeBody(4, 5),
+      nextBody: undefined,
       tail: undefined,
     });
     setState({
