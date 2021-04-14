@@ -112,6 +112,17 @@ div.node_row {
   border: solid 0.2px #2f2fa2;
 }
 
+.node-isFood {
+  text-align: center;
+  line-height: 25px;
+  vertical-align: middle;
+  width: 25px;
+  height: 25px;
+  border: solid 0.2px #242582;
+  display: inline-block;
+  background-image: url("./images/pixil-frame-0.png");
+}
+
 /* GREY: 99738e
 DARKERGREY: 553D67
 DARKERPURPLE: 242582

@@ -6,11 +6,10 @@ import Header from "./Components/Header";
 import PlayArea from "./Components/PlayArea";
 
 class SnakeBody {
-  constructor(row, col) {
+  constructor(row, col, next) {
     this.row = row;
     this.col = col;
-    this.nextBody = undefined;
-    this.direction = undefined;
+    this.nextBody = next;
   }
 }
 
@@ -19,8 +18,8 @@ function App() {
     row: 5,
     col: 5,
     directionHead: "w",
-    nextBody: new SnakeBody(4, 5), // access by -> nextBody.row, nextBody.col
-    // nextBody: undefined,
+    // nextBody: new SnakeBody(4, 5, undefined), // access by -> nextBody.row, nextBody.col
+    nextBody: undefined,
     tail: undefined,
   });
   const [boardState, setState] = useState({
@@ -81,14 +80,14 @@ function App() {
   function updateSnake() {
     // Basis of the linked list
     let current = snakeHead;
-    let next = current.nextBody;
-
-    while (current.nextBody !== undefined) {
-      next.row = current.row;
-      next.col = current.col;
-      current = current.nextBody;
-      next = next.nextBody;
-    }
+    let next = snakeHead.nextBody;
+    // linked list isnt working because I'm not "saving" the data
+    // while (current.nextBody !== undefined) {
+    //   next.row = current.row;
+    //   next.col = current.col;
+    //   current = next;
+    //   next = next.nextBody;
+    // }
   }
 
   function resetBoard() {
@@ -104,9 +103,15 @@ function App() {
 
   function updateBoard(row, col) {
     //update the board here
+    //Make this a function of update snake and call it when updatasnek gets called
+    // additionally look into the row and col situation of update snake
+    // now, the outdated version of the snakehead is being used instead of the newly updated
+    // position
+    // good luck tomorrow Gianni
     let newGrid = boardState.grid.slice();
     newGrid[row][col].state = "node-isSnake";
-    let current = snakeHead;
+    let current = snakeHead.nextBody;
+    console.log(current);
     while (current !== undefined) {
       newGrid[current.row][current.col].state = "node-isSnake";
       current = current.nextBody;
@@ -193,6 +198,9 @@ function App() {
         initialGrid[i].push(new Node(i, j));
         if (i === 5 && j === 5) {
           initialGrid[i][j].state = "node-isSnake";
+        }
+        if (i === 10 && j === 10) {
+          initialGrid[i][j].state = "node-isFood";
         }
       }
     }
