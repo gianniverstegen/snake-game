@@ -1,6 +1,5 @@
 import { useState, useEffect } from "react";
 import useInterval from "./useInterval";
-import { changePosition } from "./keypressHandler";
 import Node from "./node";
 import Header from "./Components/Header";
 import PlayArea from "./Components/PlayArea";
@@ -244,12 +243,11 @@ function App() {
 
   function generateNewFoodObject(cells) {
     // Generates a new food object
-    cells = cells;
     if (cells === undefined) {
       cells = new Set();
       let current = snakeHead;
       while (current) {
-        cells.add(`${current.row}` + `${current.col}`);
+        cells.add(`${current.row} ${current.col}`);
         current = current.nextBody;
       }
     }
@@ -257,7 +255,8 @@ function App() {
     let newGrid = boardState.grid.slice();
     let newFoodCol = Math.floor(Math.random() * 10);
     let newFoodRow = Math.floor(Math.random() * 10);
-    if (cells.has(`${newFoodRow}` + `${newFoodCol}`)) {
+    if (cells.has(`${newFoodRow} ${newFoodCol}`)) {
+      console.log("yes");
       generateNewFoodObject();
     } else {
       newGrid[newFoodRow][newFoodCol].state = "node-isFood";
