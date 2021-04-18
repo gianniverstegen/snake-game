@@ -6,3 +6,7 @@
 [*] Make the snake a linked list so the childs of the head follow
 [*] Add food
 [*] Add death
+
+[] Add extra html elements for gameover and win
+[] Make speed adjustable
+[] Clean up UI

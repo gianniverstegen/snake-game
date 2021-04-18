@@ -1,7 +1,9 @@
 import { useState, useEffect } from "react";
 import useInterval from "./useInterval";
 import Node from "./node";
+import Gameover from "./Components/Gameover"
 import Header from "./Components/Header";
+import Overlay from "./Components/Overlay";
 import PlayArea from "./Components/PlayArea";
 
 class SnakeBody {
@@ -15,23 +17,27 @@ class SnakeBody {
 function App() {
   // The states
   const [snakeHead, setHead] = useState({
-    row: 5,
-    col: 5,
-    directionHead: "w",
-    nextBody: new SnakeBody(
-      4,
-      5,
-      new SnakeBody(3, 5, new SnakeBody(2, 5, undefined))
-    ),
+    row: 4,
+    col: 3,
+    directionHead: "e",
+    nextBody: new SnakeBody(4,5, undefined),
     tail: undefined,
   });
   const [boardState, setState] = useState({
     grid: initialGrid(),
     isStarted: false,
-    currentMode: "play",
   });
-  const [isRunning, setRunning] = useState(true);
+  const [isRunning, setRunning] = useState(false);
   const [direction, setDirection] = useState("e");
+  const [gameScore, setScore] = useState(0);
+  const [gameSpeed, setSpeed] = useState(300)
+
+  function playGame(){
+    document.getElementById("playButton").classList.remove("animate")
+    if (boardState.isStarted === true) return;
+    setRunning(true)
+    setState({...boardState, isStarted: true})  
+  }
 
   useEffect(() => {
     // Listens to keyinput
@@ -47,7 +53,7 @@ function App() {
       resetBoard();
       moveSnake();
     },
-    isRunning ? 300 : null
+    isRunning ? gameSpeed : null
   );
 
   function resetBoard() {
@@ -106,27 +112,27 @@ function App() {
       if (newSnakeHeadCol < 10) {
         newCol = newSnakeHeadCol;
         newDirection = "e";
-      } else setRunning(false);
+      } else gameOver();
     } else if (direction === "s") {
       let newSnakeHeadRow = snakeHead.row + 1;
       if (newSnakeHeadRow < 10) {
         newRow = newSnakeHeadRow;
         newDirection = "s";
-      } else setRunning(false);
+      } else gameOver();
     } else if (direction === "w") {
       let newSnakeHeadCol = snakeHead.col - 1;
       if (newSnakeHeadCol >= 0) {
         newCol = newSnakeHeadCol;
         newDirection = "w";
-      } else setRunning(false);
+      } else gameOver();
     } else if (direction === "n") {
       let newSnakeHeadRow = snakeHead.row - 1;
       if (newSnakeHeadRow >= 0) {
         newRow = newSnakeHeadRow;
         newDirection = "n";
-      } else setRunning(false);
+      } else gameOver();
     }
-    if (checkPotentialDeath(newRow, newCol) === false) setRunning(false);
+    if (checkPotentialDeath(newRow, newCol) === false) gameOver();
     setHead({
       ...snakeHead,
       col: newCol,
@@ -146,27 +152,27 @@ function App() {
       if (newSnakeHeadCol < 10) {
         newCol = newSnakeHeadCol;
         newDirection = "e";
-      } else setRunning(false);
+      } else gameOver();
     } else if (snakeHead.directionHead === "s") {
       let newSnakeHeadRow = snakeHead.row + 1;
       if (newSnakeHeadRow < 10) {
         newRow = newSnakeHeadRow;
         newDirection = "s";
-      } else setRunning(false);
+      } else gameOver();
     } else if (snakeHead.directionHead === "w") {
       let newSnakeHeadCol = snakeHead.col - 1;
       if (newSnakeHeadCol >= 0) {
         newCol = newSnakeHeadCol;
         newDirection = "w";
-      } else setRunning(false);
+      } else gameOver();
     } else if (snakeHead.directionHead === "n") {
       let newSnakeHeadRow = snakeHead.row - 1;
       if (newSnakeHeadRow >= 0) {
         newRow = newSnakeHeadRow;
         newDirection = "n";
-      } else setRunning(false);
+      } else gameOver();
     }
-    if (checkPotentialDeath(newRow, newCol) === false) setRunning(false);
+    if (checkPotentialDeath(newRow, newCol) === false) gameOver();
     setHead({
       ...snakeHead,
       col: newCol,
@@ -174,6 +180,19 @@ function App() {
       directionHead: newDirection,
     });
     updateSnake(newRow, newCol);
+  }
+
+  function gameOver(win) {
+    if (win) {
+      // something extra
+      setRunning(false);
+      document.getElementById("pop-up").style.display="inline-block"
+      document.getElementById("pop-up").innerHTML="CONGRATULATIONS !! EMAIL ME FOR A BEER ! (gianni.verstegen@gmail.com) "
+    } else {
+      setRunning(false);
+      document.getElementById("resetButton").classList.add("animate")
+      document.getElementById("pop-up").style.display="inline-block"
+    }
   }
 
   function checkPotentialDeath(row, col) {
@@ -230,6 +249,10 @@ function App() {
 
   function foodConsumption() {
     // Handles growth and foodconsumption
+    // Overlay score update
+    let newScore = gameScore;
+    newScore += 1;
+    setScore(newScore);
     let current = snakeHead;
     while (current !== undefined) {
       if (current.nextBody === undefined) {
@@ -251,7 +274,7 @@ function App() {
         current = current.nextBody;
       }
     }
-    if (cells.size === 79) setRunning(false); // Wins
+    if (cells.size === 79) gameOver("win"); // Wins
     let newGrid = boardState.grid.slice();
     let newFoodCol = Math.floor(Math.random() * 10);
     let newFoodRow = Math.floor(Math.random() * 10);
@@ -264,12 +287,6 @@ function App() {
     }
   }
 
-  function switchMode() {
-    if (boardState.currentMode === "play") {
-      setState({ ...boardState, currentMode: "simulate" });
-    } else setState({ ...boardState, currentMode: "play" });
-  }
-
   function initialGrid() {
     // Creating the initial grid
     let initialGrid = [];
@@ -277,10 +294,10 @@ function App() {
       initialGrid.push([]);
       for (let j = 0; j < 10; j++) {
         initialGrid[i].push(new Node(i, j));
-        if (i === 5 && j === 5) {
+        if (i === 4 && j === 3) {
           initialGrid[i][j].state = "node-isSnake";
         }
-        if (i === 8 && j === 8) {
+        if (i === 4 && j === 6) {
           initialGrid[i][j].state = "node-isFood";
         }
       }
@@ -288,31 +305,44 @@ function App() {
     return initialGrid;
   }
 
+  function speedHandler(mode){
+    if (mode === "easy"){
+      setSpeed(450)
+    }
+    else if (mode === "normal"){
+      setSpeed(300)
+    } else setSpeed(200)
+
+  }
+
   function resetHandler() {
-    setRunning(true);
+    document.getElementById("pop-up").style.display="none"
+    document.getElementById("resetButton").classList.remove("animate")
+    document.getElementById("playButton").classList.add("animate")
+    setRunning(false);
     setDirection("e");
     setHead({
-      row: 5,
-      col: 5,
-      directionHead: "w",
-      nextBody: new SnakeBody(4, 5, new SnakeBody(3, 5, undefined)),
-      // nextBody: undefined,
+      row: 4,
+      col: 3,
+      directionHead: "e",
+      nextBody: new SnakeBody(4, 5,undefined),
       tail: undefined,
     });
     setState({
       grid: initialGrid(),
-      isStarted: false,
-      currentMode: "play",
+      isStarted: false
     });
   }
 
   return (
     <div className="App">
+      <Gameover/>
       <Header
         resetHandler={resetHandler}
-        currentMode={boardState.currentMode}
-        switchMode={switchMode}
+        playGame = {playGame}
+        speedHandler={speedHandler}
       />
+      <Overlay score={gameScore} />
       <PlayArea grid={boardState.grid} />
     </div>
   );

@@ -21,6 +21,8 @@ button {
   border: none;
   outline: none;
   -moz-outline: none;
+  border-radius: 8px;
+
 }
 
 button:active {
@@ -64,21 +66,30 @@ button.play {
   margin-right: 3%;
 }
 
+/* Legend section */
+div.legend {
+  height: 80px;
+  background-color: #242582;
+  text-align: center;
+  line-height: 80px;
+  vertical-align: middle;
+}
+
 /* Play Area */
 div.playArea {
   width: 100%;
   min-width: 500px;
   position: fixed;
   height: 100%;
-  min-height: 600px;
+  min-height: 450px;
   text-align: center;
   background-color: #242582;
   color: #2d283e;
 }
 
 div.node_container {
-  top: 38%;
-  transform: translate(0, -40%);
+  /* top: 30%; */
+  /* transform: translate(0, -40%); */
   height: auto;
   overflow: auto;
   text-align: center;
@@ -133,6 +144,92 @@ div.node_row {
   background-color: #2f2fa2;
   border: solid 0.2px #2f2fa2;
 }
+
+#header-selector {
+  position: relative;
+}
+
+.header-dropdown {
+  display: none;
+  position: absolute;
+  padding-top: 21px;
+  width: 200px;
+  left: 0;
+  z-index: 3;
+}
+
+.header-dropdown div {
+  box-sizing: border-box;
+  width: 200px;
+  padding-top: 7px;
+  padding-bottom: 9px;
+  background-color: #2f2fa2;
+  border-radius: 6px;
+}
+
+#header-selector:hover {
+  background-color: #3a3dff;
+  border-radius: 8px;
+}
+
+#header-selector:hover .header-dropdown {
+  display: block;
+}
+
+.pop-up {
+  position: absolute;
+  top: 250px;
+  left: 34.7%;
+  width: 30%;
+  height: 50px;
+  line-height: 50px;
+  vertical-align: middle;
+  background-color: #242582;
+  min-width: 300px;
+  text-align: center;
+  /* opacity: ; */
+  border-radius: 10px;
+  border: solid 3px #4f4fd6;
+  z-index: 10;
+  display: none;
+  animation-name: endingAnimation;
+  animation-duration: 1.5s;
+  animation-iteration-count: infinite;
+}
+
+.play.animate{
+  animation-name: visualizeButtonAnimation;
+  animation-duration: 1.5s;
+  animation-iteration-count: infinite;
+}
+
+#resetButton.animate{
+  animation-name: visualizeButtonAnimation;
+  animation-duration: 1.5s;
+  animation-iteration-count: infinite;
+}
+
+
+@keyframes endingAnimation{
+  50%{
+    color: red;
+    transform: scale(1.01);
+  }
+}
+
+@keyframes visualizeButtonAnimation {
+  50% {
+    background-color: #242582;
+    color: #f64c72;
+  }
+}
+
+
+
+
+
+
+
 
 /* GREY: 99738e
 DARKERGREY: 553D67
