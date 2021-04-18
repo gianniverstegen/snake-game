@@ -321,6 +321,7 @@ function App() {
     document.getElementById("playButton").classList.add("animate")
     setRunning(false);
     setDirection("e");
+    setScore(0)
     setHead({
       row: 4,
       col: 3,
