@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import useInterval from "./useInterval";
 import Node from "./node";
-import Gameover from "./Components/Gameover"
+import Gameover from "./Components/Gameover";
 import Header from "./Components/Header";
 import Overlay from "./Components/Overlay";
 import PlayArea from "./Components/PlayArea";
@@ -20,7 +20,7 @@ function App() {
     row: 4,
     col: 3,
     directionHead: "e",
-    nextBody: new SnakeBody(4,5, undefined),
+    nextBody: new SnakeBody(4, 5, undefined),
     tail: undefined,
   });
   const [boardState, setState] = useState({
@@ -30,13 +30,13 @@ function App() {
   const [isRunning, setRunning] = useState(false);
   const [direction, setDirection] = useState("e");
   const [gameScore, setScore] = useState(0);
-  const [gameSpeed, setSpeed] = useState(300)
+  const [gameSpeed, setSpeed] = useState(300);
 
-  function playGame(){
-    document.getElementById("playButton").classList.remove("animate")
+  function playGame() {
+    document.getElementById("playButton").classList.remove("animate");
     if (boardState.isStarted === true) return;
-    setRunning(true)
-    setState({...boardState, isStarted: true})  
+    setRunning(true);
+    setState({ ...boardState, isStarted: true });
   }
 
   useEffect(() => {
@@ -186,12 +186,12 @@ function App() {
     if (win) {
       // something extra
       setRunning(false);
-      document.getElementById("pop-up").style.display="inline-block"
-      document.getElementById("pop-up").innerHTML="CONGRATULATIONS !! EMAIL ME FOR A BEER ! (gianni.verstegen@gmail.com) "
+      document.getElementById("pop-up").style.display = "inline-block";
+      document.getElementById("pop-up").innerHTML = "CONGRATULATIONS !!";
     } else {
       setRunning(false);
-      document.getElementById("resetButton").classList.add("animate")
-      document.getElementById("pop-up").style.display="inline-block"
+      document.getElementById("resetButton").classList.add("animate");
+      document.getElementById("pop-up").style.display = "inline-block";
     }
   }
 
@@ -305,42 +305,40 @@ function App() {
     return initialGrid;
   }
 
-  function speedHandler(mode){
-    if (mode === "easy"){
-      setSpeed(450)
-    }
-    else if (mode === "normal"){
-      setSpeed(300)
-    } else setSpeed(200)
-
+  function speedHandler(mode) {
+    if (mode === "easy") {
+      setSpeed(450);
+    } else if (mode === "normal") {
+      setSpeed(300);
+    } else setSpeed(200);
   }
 
   function resetHandler() {
-    document.getElementById("pop-up").style.display="none"
-    document.getElementById("resetButton").classList.remove("animate")
-    document.getElementById("playButton").classList.add("animate")
+    document.getElementById("pop-up").style.display = "none";
+    document.getElementById("resetButton").classList.remove("animate");
+    document.getElementById("playButton").classList.add("animate");
     setRunning(false);
     setDirection("e");
-    setScore(0)
+    setScore(0);
     setHead({
       row: 4,
       col: 3,
       directionHead: "e",
-      nextBody: new SnakeBody(4, 5,undefined),
+      nextBody: new SnakeBody(4, 5, undefined),
       tail: undefined,
     });
     setState({
       grid: initialGrid(),
-      isStarted: false
+      isStarted: false,
     });
   }
 
   return (
     <div className="App">
-      <Gameover/>
+      <Gameover />
       <Header
         resetHandler={resetHandler}
-        playGame = {playGame}
+        playGame={playGame}
         speedHandler={speedHandler}
       />
       <Overlay score={gameScore} />

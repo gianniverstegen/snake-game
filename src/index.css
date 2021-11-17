@@ -29,7 +29,7 @@ button:active {
 }
 
 button.play:active {
-  color: #c2c2c2;
+  color: #ffffff;
 }
 
 /* Header Section*/
@@ -60,7 +60,7 @@ button.logo {
 button.play {
   border-radius: 8px;
   width: 15%;
-  background-color: #c2c2c2;
+  background-color: #ffffff;
   color: #000000;
   margin-right: 3%;
 }
@@ -118,8 +118,8 @@ div.node_row {
   width: 32px;
   height: 32px;
   display: inline-block;
-  background-color: #c2c2c2;
-  border: solid 0.2px #c2c2c2;
+  background-color: #3a3dff;
+  border: solid 0.2px #3a3dff;
 }
 
 .node-isFood {
@@ -140,8 +140,8 @@ div.node_row {
   width: 32px;
   height: 32px;
   display: inline-block;
-  background-color: #c2c2c2;
-  border: solid 0.2px #c2c2c2;
+  background-color: #3a3dff;
+  border: solid 0.2px #3a3dff;
 }
 
 #header-selector {
@@ -164,10 +164,6 @@ div.node_row {
   padding-bottom: 9px;
   background-color: #c2c2c2;
   border-radius: 6px;
-}
-
-.header-dropdown div:hover {
-  background-color: #ffffff;
 }
 
 #header-selector:hover {
@@ -222,7 +218,7 @@ div.node_row {
 @keyframes visualizeButtonAnimation {
   50% {
     background-color: #ffffff;
-    color: #080808;
+    color: #3a3dff;
   }
 }
 
